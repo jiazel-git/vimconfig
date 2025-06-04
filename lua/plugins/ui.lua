@@ -231,11 +231,6 @@ return {
       init = function() vim.g.barbar_auto_setup = false end,
       event = {"VeryLazy"},
       opts = {
-        animation = false,
-        auto_hide = 1,
-        sidebar_filetypes = {
-          NvimTree = true,
-        }
       },
       keys = {
         {"<A-<>","<CMD>BufferMovePrevious<CR>", mode = {"n"},desc = "[Buffer] move buffer left"},
@@ -254,27 +249,6 @@ return {
         {"<A-w>","<CMD>BufferClose<CR>", mode = {"n"},desc = "[Buffer] close buffer"},
       }
     },
-
-    -- nvim-tree
-  {
-    "nvim-tree/nvim-tree.lua",
-    version = "*",
-    lazy = false,
-    renderer = {
-      indent_marks = {
-        enable = true,
-      },
-    },
-    dependencies = {
-      "nvim-tree/nvim-web-devicons",
-    },
-    keys = {
-      {"<leader>e","<CMD>NvimTreeToggle<CR>", mode = {"n"},desc = "[NvimTree] Toggle NvimTree"}
-    },
-    config = function()
-      require("nvim-tree").setup {}
-    end,
-  },
 
   -- rainbow-delimiters
   {

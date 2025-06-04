@@ -6,6 +6,13 @@ return {
             ensure_installed = {
                 "lua-language-server",
             },
+            ui = {
+                icons = {
+                    package_installed = "✓",
+                    package_pending = "➜",
+                    package_uninstalled = "✗"
+                }
+            }
         },
 
         config = function(_,opts)
@@ -32,12 +39,6 @@ return {
         'neovim/nvim-lspconfig',
         dependencies = { 'saghen/blink.cmp' },
 
-        -- example using `opts` for defining servers
-        opts = {
-            servers = {
-            lua_ls = {}
-            }
-        },
 
         config = function()
             local capabilities = require('blink.cmp').get_lsp_capabilities()
