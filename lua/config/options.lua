@@ -52,3 +52,5 @@ vim.opt.startofline = false
 vim.opt.conceallevel = 2
 
 vim.wo.wrap = false
+
+vim.o.winborder = 'rounded'
