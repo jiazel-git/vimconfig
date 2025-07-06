@@ -54,3 +54,14 @@ vim.opt.conceallevel = 2
 vim.wo.wrap = false
 
 vim.o.winborder = 'rounded'
+
+-- 启用bufferline的event
+vim.o.mousemoveevent = true
+
+
+vim.diagnostic.config({
+               virtual_text = true,
+               signs = true,
+               underline = true,
+               update_in_insert = false,
+           })
