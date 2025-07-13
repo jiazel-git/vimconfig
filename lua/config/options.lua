@@ -59,9 +59,9 @@ vim.o.winborder = 'rounded'
 vim.o.mousemoveevent = true
 
 
-vim.diagnostic.config({
-               virtual_text = true,
-               signs = true,
-               underline = true,
-               update_in_insert = false,
-           })
+--vim.diagnostic.config({
+--               virtual_text = true,
+--               signs = true,
+--               underline = true,
+--               update_in_insert = false,
+--           })

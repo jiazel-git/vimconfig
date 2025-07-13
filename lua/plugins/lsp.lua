@@ -5,8 +5,6 @@ return {
         opts = {
             ensure_installed = {
                 "lua-language-server",
-                "clangd",
-                "gopls"
             },
             ui = {
                 icons = {
@@ -14,7 +12,7 @@ return {
                     package_pending = "➜",
                     package_uninstalled = "✗"
                 }
-            }
+            },
         },
 
         config = function(_,opts)
@@ -41,30 +39,99 @@ return {
         'neovim/nvim-lspconfig',
         dependencies = {
             'saghen/blink.cmp',
+            { "MysticalDevil/inlay-hints.nvim", event = "LspAttach" },
         },
-        -- example using `opts` for defining servers
+
         opts = {
-          servers = {
-            lua_ls = {
-                codelens = {
-                    enable = true,
+            diagnostics = {
+                underline = true,
+                update_in_insert = false,
+                virtual_text = {
+                    spacing = 4,
+                    source = "if_many",
+                    prefix = function(diagnostic)
+                        local severity_name = ({
+                            [vim.diagnostic.severity.ERROR] = "ERROR",
+                            [vim.diagnostic.severity.WARN]  = "WARN",
+                            [vim.diagnostic.severity.INFO]  = "INFO",
+                            [vim.diagnostic.severity.HINT]  = "HINT"
+                        })[diagnostic.severity]
+                        local icons = {
+                            ERROR = "✘",
+                            WARN = "▲",
+                            INFO = "⚑",
+                            HINT =  "»",
+                        }
+                        print(diagnostic.severity)
+                        return icons[severity_name] or  "● "
+                    end,
+                },
+                severity_sort = true,
+                signs =  {
+                    text = {
+                        ERROR = "✘",
+                        WARN = "▲",
+                        INFO = "⚑",
+                        HINT =  "»",
+                    }
                 }
             },
-            clangd = {
-                cmd = {"clangd",},
+            inlay_hints = {
+                enabled = true,
             },
-            gopls = {},
-            pyright = {},
-          }
+            servers = {
+                lua_ls = {
+                    settings = {
+                        Lua = {
+                            hint = {
+                                enable = true,
+                            }
+                        }
+                    }
+                }
+            },
         },
-        config = function(_, opts)
-          local lspconfig = require('lspconfig')
-          for server, config in pairs(opts.servers) do
-            -- passing config.capabilities to blink.cmp merges with the capabilities in your
-            -- `opts[server].capabilities, if you've defined it
-            config.capabilities = require('blink.cmp').get_lsp_capabilities(config.capabilities)
-            lspconfig[server].setup(config)
-          end
-        end
+        config = function(_,opts)
+
+            require("inlay-hints").setup()
+            vim.diagnostic.config(vim.deepcopy(opts.diagnostics))
+
+            --[[if opts.inlay_hints.enabled and vim.lsp.inlay_hint then
+                vim.api.nvim_create_autocmd("LspAttach",{
+                    callback = function (args)
+                        local buffer = args.buf
+                        --local filetype = vim.bo[buffer].filetype
+
+                        if vim.api.nvim_buf_is_valid(buffer) and vim.bo[buffer].buftype == "" then
+                            pcall(vim.lsp.inlay_hint.enable,buffer,true)
+                        end
+                    end
+                })
+            end]]
+            local servers = opts.servers
+            local has_blink,blink = pcall(require,"blink.cmp")
+            local capabilities = vim.tbl_deep_extend(
+                "force",
+                {},
+                vim.lsp.protocol.make_client_capabilities(),
+                has_blink and blink.get_lsp_capabilities() or {},
+                opts.capabilities or {}
+            )
+
+            local function setup(server)
+                local server_opts = vim.tbl_deep_extend(
+                    "force",
+                    {
+                        capabilities = vim.deepcopy(capabilities),
+                    },
+                    servers[server] or {}
+                )
+                require("lspconfig")[server].setup(server_opts)
+            end
+
+            for server,_ in pairs(servers) do
+                setup(server)
+            end
+        end,
     }
 }
