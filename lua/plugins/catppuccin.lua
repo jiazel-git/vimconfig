@@ -32,12 +32,16 @@ return {
         color_overrides = {},
         custom_highlights = function(colors)
             return {
-                LineNr = { fg = colors.surface2},
-                Visual = { bg = colors.overlay0},
-                Search = { bg = colors.surface2},
-                Incsearch = { bg = colors.lavender},
-                CurSearch = { bg = colors.lavender},
-                MatchParen = { bg = colors.lavender, fg = colors.base, bold = true},
+                LineNr = { fg = colors.surface2 },
+                Visual = { bg = colors.overlay0 },
+                Search = { bg = colors.surface2 },
+                Incsearch = { bg = colors.lavender },
+                CurSearch = { bg = colors.lavender },
+                MatchParen = {
+                    bg = colors.lavender,
+                    fg = colors.base,
+                    bold = true,
+                },
             }
         end,
         default_integrations = true,
@@ -54,14 +58,12 @@ return {
             mason = true,
             notice = true,
             notify = true,
-            rainbow_delimiters = true
+            rainbow_delimiters = true,
             -- For more plugins integrations please scroll down (https://github.com/catppuccin/nvim#integrations)
         },
 
         config = function()
-            vim.cmd.colorscheme "catppuccin"
-        end
-
-    }
+            vim.cmd.colorscheme("catppuccin")
+        end,
+    },
 }
-
