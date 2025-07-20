@@ -8,33 +8,33 @@ vim.opt.relativenumber = true
 -- cursor
 
 local function set_cursorline_underline()
-  vim.api.nvim_set_hl(0, "CursorLine", {
-    underline = true,
-    sp = "#ffffff", -- 下划线颜色
-    bg = nil,
-    fg = nil,
-  })
+    vim.api.nvim_set_hl(0, "CursorLine", {
+        underline = true,
+        sp = "#ffffff", -- 下划线颜色
+        bg = nil,
+        fg = nil,
+    })
 end
 
 vim.opt.cursorline = true
 set_cursorline_underline()
 
 vim.api.nvim_create_autocmd("InsertEnter", {
-  pattern = "*",
-  callback = function()
-    vim.opt_local.cursorline = false
-  end,
+    pattern = "*",
+    callback = function()
+        vim.opt_local.cursorline = false
+    end,
 })
 
 vim.api.nvim_create_autocmd("InsertLeave", {
-  pattern = "*",
-  callback = function()
-    vim.opt_local.cursorline = true
-    set_cursorline_underline()
-  end,
+    pattern = "*",
+    callback = function()
+        vim.opt_local.cursorline = true
+        set_cursorline_underline()
+    end,
 })
 
--- Tab 
+-- Tab
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
@@ -53,15 +53,12 @@ vim.opt.conceallevel = 2
 
 vim.wo.wrap = false
 
-vim.o.winborder = 'rounded'
+vim.o.winborder = "rounded"
 
 -- 启用bufferline的event
 vim.o.mousemoveevent = true
 
-
---vim.diagnostic.config({
---               virtual_text = true,
---               signs = true,
---               underline = true,
---               update_in_insert = false,
---           })
+-- no swap file
+vim.o.swapfile = false
+vim.o.backup = false
+vim.o.writebackup = false

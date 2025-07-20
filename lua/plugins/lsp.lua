@@ -5,21 +5,25 @@ return {
         opts = {
             ensure_installed = {
                 "lua-language-server",
+                "html-lsp",
+                "pyright",
+                "stylua",
+                "gopls",
             },
             ui = {
                 icons = {
                     package_installed = "✓",
                     package_pending = "➜",
-                    package_uninstalled = "✗"
-                }
+                    package_uninstalled = "✗",
+                },
             },
         },
 
-        config = function(_,opts)
+        config = function(_, opts)
             require("mason").setup(opts)
             local mr = require("mason-registry")
             local function ensure_installed()
-                for _,tool in ipairs(opts.ensure_installed) do
+                for _, tool in ipairs(opts.ensure_installed) do
                     local p = mr.get_package(tool)
                     if not p:is_installed() then
                         p:install()
@@ -36,9 +40,9 @@ return {
 
     -- lspconfig
     {
-        'neovim/nvim-lspconfig',
+        "neovim/nvim-lspconfig",
         dependencies = {
-            'saghen/blink.cmp',
+            "saghen/blink.cmp",
             { "MysticalDevil/inlay-hints.nvim", event = "LspAttach" },
         },
 
@@ -52,29 +56,29 @@ return {
                     prefix = function(diagnostic)
                         local severity_name = ({
                             [vim.diagnostic.severity.ERROR] = "ERROR",
-                            [vim.diagnostic.severity.WARN]  = "WARN",
-                            [vim.diagnostic.severity.INFO]  = "INFO",
-                            [vim.diagnostic.severity.HINT]  = "HINT"
+                            [vim.diagnostic.severity.WARN] = "WARN",
+                            [vim.diagnostic.severity.INFO] = "INFO",
+                            [vim.diagnostic.severity.HINT] = "HINT",
                         })[diagnostic.severity]
                         local icons = {
                             ERROR = "✘",
                             WARN = "▲",
                             INFO = "⚑",
-                            HINT =  "»",
+                            HINT = "»",
                         }
                         print(diagnostic.severity)
-                        return icons[severity_name] or  "● "
+                        return icons[severity_name] or "● "
                     end,
                 },
                 severity_sort = true,
-                signs =  {
+                signs = {
                     text = {
                         ERROR = "✘",
                         WARN = "▲",
                         INFO = "⚑",
-                        HINT =  "»",
-                    }
-                }
+                        HINT = "»",
+                    },
+                },
             },
             inlay_hints = {
                 enabled = true,
@@ -85,31 +89,61 @@ return {
                         Lua = {
                             hint = {
                                 enable = true,
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
+                gopls = {
+                    settings = {
+                        gopls = {
+                            gofumpt = true,
+                            codelenses = {
+                                gc_details = false,
+                                generate = true,
+                                regenerate_cgo = true,
+                                run_govulncheck = true,
+                                test = true,
+                                tidy = true,
+                                upgrade_dependency = true,
+                                vendor = true,
+                            },
+                            hints = {
+                                assignVariableTypes = true,
+                                compositeLiteralFields = true,
+                                compositeLiteralTypes = true,
+                                constantValues = true,
+                                functionTypeParameters = true,
+                                parameterNames = true,
+                                rangeVariableTypes = true,
+                            },
+                            analyses = {
+                                nilness = true,
+                                unusedparams = true,
+                                unusedwrite = true,
+                                useany = true,
+                            },
+                            usePlaceholders = true,
+                            completeUnimported = true,
+                            staticcheck = true,
+                            directoryFilters = {
+                                "-.git",
+                                "-.vscode",
+                                "-.idea",
+                                "-.vscode-test",
+                                "-node_modules",
+                            },
+                            semanticTokens = true,
+                        },
+                    },
+                },
             },
         },
-        config = function(_,opts)
-
+        config = function(_, opts)
             require("inlay-hints").setup()
             vim.diagnostic.config(vim.deepcopy(opts.diagnostics))
 
-            --[[if opts.inlay_hints.enabled and vim.lsp.inlay_hint then
-                vim.api.nvim_create_autocmd("LspAttach",{
-                    callback = function (args)
-                        local buffer = args.buf
-                        --local filetype = vim.bo[buffer].filetype
-
-                        if vim.api.nvim_buf_is_valid(buffer) and vim.bo[buffer].buftype == "" then
-                            pcall(vim.lsp.inlay_hint.enable,buffer,true)
-                        end
-                    end
-                })
-            end]]
             local servers = opts.servers
-            local has_blink,blink = pcall(require,"blink.cmp")
+            local has_blink, blink = pcall(require, "blink.cmp")
             local capabilities = vim.tbl_deep_extend(
                 "force",
                 {},
@@ -119,19 +153,15 @@ return {
             )
 
             local function setup(server)
-                local server_opts = vim.tbl_deep_extend(
-                    "force",
-                    {
-                        capabilities = vim.deepcopy(capabilities),
-                    },
-                    servers[server] or {}
-                )
+                local server_opts = vim.tbl_deep_extend("force", {
+                    capabilities = vim.deepcopy(capabilities),
+                }, servers[server] or {})
                 require("lspconfig")[server].setup(server_opts)
             end
 
-            for server,_ in pairs(servers) do
+            for server, _ in pairs(servers) do
                 setup(server)
             end
         end,
-    }
+    },
 }

@@ -5,13 +5,14 @@ return {
         event = "VeryLazy",
         opts = {
             poupmenu = {
-                enable = false,
+                enable = true,
+                backend = "cmp",
             },
             lsp = {
                 override = {
-                    ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-                    ["vim.lsp.util.stylize_markdown"] = true,
-                    ["com.entry.get_documentation"] = true,
+                    ["vim.lsp.util.convert_input_to_markdown_lines"] = false,
+                    ["vim.lsp.util.stylize_markdown"] = false,
+                    ["com.entry.get_documentation"] = false,
                 },
             },
         },
@@ -46,7 +47,10 @@ return {
                 filter = { event = "msg_show", kind = "search_count" },
                 opts = { skip = true },
             },
-            { filter = { event = "msg_show", kind = "" }, opts = { skip = true } },
+            {
+                filter = { event = "msg_show", kind = "" },
+                opts = { skip = true },
+            },
         },
     },
 
