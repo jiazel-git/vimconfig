@@ -26,7 +26,12 @@ return {
                 },
             },
             explorer = { enabled = false },
-            indent = { enabled = true },
+            indent = {
+                enabled = true,
+                chunk = {
+                    enabled = true,
+                },
+            },
             input = { enabled = true },
             picker = { enabled = true },
             notifier = { enabled = true },
