@@ -54,11 +54,16 @@ return {
                 indentscope_color = "",
             },
             barbar = true,
-            blink_cmp = true,
             mason = true,
             notice = true,
             notify = true,
             rainbow_delimiters = true,
+            blink_cmp = {
+                style = "bordered",
+            },
+            flash = true,
+            markdown = true,
+            neo_tree = true,
             -- For more plugins integrations please scroll down (https://github.com/catppuccin/nvim#integrations)
         },
 

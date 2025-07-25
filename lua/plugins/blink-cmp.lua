@@ -3,7 +3,10 @@ return {
     {
         "saghen/blink.cmp",
         -- optional: provides snippets for the snippet source
-        dependencies = { "rafamadriz/friendly-snippets" },
+        dependencies = {
+            "rafamadriz/friendly-snippets",
+            "xzbdmw/colorful-menu.nvim",
+        },
 
         version = "1.*",
 
@@ -31,14 +34,52 @@ return {
             },
 
             completion = {
+                documentation = {
+                    auto_show = true,
+                },
                 keyword = {
                     range = "prefix",
+                },
+                ghost_text = {
+                    enabled = true,
+                },
+                menu = {
+                    draw = {
+                        -- We don't need label_description now because label and label_description are already
+                        -- combined together in label by colorful-menu.nvim.
+                        columns = { { "kind_icon" }, { "label", gap = 1 } },
+                        components = {
+                            label = {
+                                text = function(ctx)
+                                    return require("colorful-menu").blink_components_text(
+                                        ctx
+                                    )
+                                end,
+                                highlight = function(ctx)
+                                    return require("colorful-menu").blink_components_highlight(
+                                        ctx
+                                    )
+                                end,
+                            },
+                        },
+                    },
+                },
+            },
+
+            signature = {
+                enabled = true,
+            },
+
+            cmdline = {
+                completion = {
+                    menu = {
+                        auto_show = true,
+                    },
                 },
             },
 
             documentation = {
                 window = {
-                    border = "rounded",
                     scrollbar = false,
                 },
             },
