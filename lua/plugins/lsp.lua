@@ -9,6 +9,7 @@ return {
                 "pyright",
                 "stylua",
                 "gopls",
+                "prettier",
             },
             ui = {
                 icons = {

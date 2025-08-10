@@ -62,3 +62,9 @@ vim.o.mousemoveevent = true
 vim.o.swapfile = false
 vim.o.backup = false
 vim.o.writebackup = false
+
+-- 启用窗口标题
+vim.o.title = true
+
+-- 自定义标题格式：显示文件名 + nvim
+vim.o.titlestring = "%t - nvim"
